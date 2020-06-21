@@ -34,11 +34,12 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "bundle": "webpack",
     "start": "webpack-dev-server --mode development --open --hot",
-    "build": "webpack --mode production",
+    "test": "yarn build:tsc & yarn lint",
     "lint": "yarn lint:code & yarn lint:css",
     "lint:code": "eslint ./src/**/*.{js,ts,tsx} --fix",
-    "lint:css":"stylelint ./src/**/*.{js,ts,tsx}"
+    "lint:css":"stylelint ./src/**/*.{js,ts,tsx}",
+    "build": "webpack --mode production",
+    "build:tsc": "tsc"
   }
 }

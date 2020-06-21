@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Label } from './Label';
-import { PanelC } from './Panel';
 
 export const Card = styled.div`
   display: flex;
@@ -52,7 +51,9 @@ export const CardSubInfo = styled(Label)`
   align-self: flex-end;
 `;
 
-export const CardFooterPanel = styled(PanelC)`
+export const CardFooterPanel = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin: 0 0.7em;
 `;

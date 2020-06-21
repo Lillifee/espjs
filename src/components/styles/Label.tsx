@@ -1,56 +1,41 @@
 import styled from 'styled-components';
 
 export interface LabelProps {
-  skeleton?: boolean;
+  size?: 'xs' | 's' | 'm' | 'l' | 'xl';
 }
 
 export const SkeletonLine = styled.div`
-  /* font-size: 1em; */
-  /* height: 1em; */
-  background: ${({ theme }) => theme.HighlightBackground};
-  width: 7em;
+  background-image: ${({ theme }) =>
+    `linear-gradient(90deg, ${theme.HighlightBackground} 0px, ${theme.Background} 40px, ${theme.HighlightBackground} 80px)`};
+
+  border-radius: 3px;
+  background-size: 200%;
+  animation: gradient 2s ease infinite;
+  width: 6em;
 
   &::before {
     content: ' ';
     white-space: pre;
   }
+
+  @keyframes gradient {
+    0% {
+      background-position: 100%;
+    }
+    40% {
+      background-position: -100%;
+    }
+    100% {
+      background-position: -100%;
+    }
+  }
 `;
 
 export const Label = styled.div<LabelProps>`
-  /* height: 1em; */
-  font-size: 1em;
+  font-size: ${({ size, theme }) => theme.FontSize[size || 'm']};
   margin: 0.2em 0;
-`;
-
-export const LabelXS = styled(Label)`
-  font-size: 0.7em;
-  margin: 0.2em 0;
-`;
-
-export const LabelS = styled(Label)`
-  font-size: 0.8em;
-  margin: 0.2em 0;
-`;
-
-export const LabelL = styled(Label)`
-  font-size: 2em;
-  margin: 0.2em 0;
-`;
-
-export const LabelXL = styled(Label)`
-  font-size: 3em;
-  font-weight: lighter;
-  margin: 0.1em 0;
 `;
 
 export const SubLabel = styled(Label)`
-  color: ${(props) => props.theme.SubForeground};
-`;
-
-export const SubLabelXS = styled(LabelXS)`
-  color: ${(props) => props.theme.SubForeground};
-`;
-
-export const SubLabelS = styled(LabelS)`
   color: ${(props) => props.theme.SubForeground};
 `;

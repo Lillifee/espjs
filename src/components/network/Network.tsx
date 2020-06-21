@@ -4,17 +4,14 @@ import {
   Card,
   CardTitle,
   CardInfo,
-  LabelS,
-  LabelXL,
   Label,
   CardFooter,
-  SubLabelS,
-  SubLabelXS,
   CardSetting,
   Input,
   CardContainer,
   CardFooterPanel,
   Button,
+  SubLabel,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
 import { themePrimary, theme } from '../theme';
@@ -26,8 +23,8 @@ export const Network: React.FC = () => (
 
       <ThemeProvider theme={themePrimary}>
         <CardInfo>
-          <LabelS>IP Address</LabelS>
-          <LabelXL>192.168.1.115</LabelXL>
+          <Label size="s">IP Address</Label>
+          <Label size="xl">192.168.1.115</Label>
         </CardInfo>
       </ThemeProvider>
 
@@ -37,7 +34,7 @@ export const Network: React.FC = () => (
         </ThemeProvider>
         <CardFooterPanel>
           <Label>Configuration</Label>
-          <SubLabelS>Static IP Address</SubLabelS>
+          <SubLabel size="s">Static IP Address</SubLabel>
         </CardFooterPanel>
         <ThemeProvider theme={theme}>
           <ButtonIcon type="ExpandMore" />
@@ -45,16 +42,16 @@ export const Network: React.FC = () => (
       </CardFooter>
 
       <CardSetting>
-        <SubLabelXS>IP Address</SubLabelXS>
+        <SubLabel size="xs">IP Address</SubLabel>
         <Input value="192.168.1.115" />
 
-        <SubLabelXS>Subnet Mask</SubLabelXS>
+        <SubLabel size="xs">Subnet Mask</SubLabel>
         <Input value="255.255.255.0" />
 
-        <SubLabelXS>Default Gateway</SubLabelXS>
+        <SubLabel size="xs">Default Gateway</SubLabel>
         <Input value="192.168.1.1" />
 
-        <SubLabelXS>Domain Name Server</SubLabelXS>
+        <SubLabel size="xs">Domain Name Server</SubLabel>
         <Input value="192.168.1.1" />
 
         <ThemeProvider theme={themePrimary}>
