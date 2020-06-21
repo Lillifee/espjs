@@ -16,17 +16,17 @@ import {
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
 import { themePrimary } from '../theme';
-import { useFetch, useInterval } from '../hooks';
+import { useFetch, useInterval, useUserInput } from '../hooks';
 import { Gauge } from '../common/Gauge';
 
 export interface ApiWifiSettings {
-  host?: string;
-  password?: string;
-  ssid?: string;
+  host: string;
+  password: string;
+  ssid: string;
 }
 
 export interface ApiWifiStatus {
-  rssi?: string;
+  rssi: string;
 }
 
 export const Wifi: React.FC = () => {
@@ -90,11 +90,12 @@ export const WifiStatus: React.FC = () => {
 };
 
 export const WifiFooter: React.FC = () => {
-  const [wifi, isLoading] = useFetch<ApiWifiSettings>('/api/wifiSettings');
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setUserInput] = React.useState<ApiWifiSettings>();
 
-  const data = userInput || wifi;
+  const [wifi, isLoading, refresh, update] = useFetch<ApiWifiSettings>('/api/wifi');
+  const [userInput, setInput] = useUserInput<ApiWifiSettings>();
+
+  const data = React.useMemo<Partial<ApiWifiSettings>>(() => ({ ...wifi, ...userInput }), [wifi, userInput]);
 
   return (
     <React.Fragment>
@@ -112,20 +113,19 @@ export const WifiFooter: React.FC = () => {
       {expanded && (
         <CardSetting>
           <SubLabel size="xs">Host</SubLabel>
-          <Input defaultValue={data?.host} onChange={(e) => setUserInput({ ...data, host: e.target.value })} />
+          <Input defaultValue={data.host} onChange={setInput('host')} />
 
           <SubLabel size="xs">SSID</SubLabel>
-          <Input defaultValue={data?.ssid} onChange={(e) => setUserInput({ ...data, ssid: e.target.value })} />
+          <Input defaultValue={data.ssid} onChange={setInput('ssid')} />
 
           <SubLabel size="xs">Password</SubLabel>
-          <Input
-            type="Password"
-            defaultValue={data?.password}
-            onChange={(e) => setUserInput({ ...data, password: e.target.value })}
-          />
+          <Input type="Password" defaultValue={data.password} onChange={setInput('password')} />
 
-          <Button theme={themePrimary}>Apply</Button>
-          {/* onClick={() => update(data)} */}
+          {userInput && (
+            <Button theme={themePrimary} onClick={() => update(userInput)}>
+              Apply
+            </Button>
+          )}
         </CardSetting>
       )}
     </React.Fragment>
