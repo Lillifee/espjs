@@ -1,24 +1,19 @@
 # espjs
 
-ESP configuration website template.<br/>
+ESP configuration template.<br/>
 
 ## Available Scripts
-
-In the project directory, you can run:
 
 ### `yarn start`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
+The development server redirect all `/api` requests to `cube.local`. <br/>
+If your ESP is running on a different address, you can adjust the proxy server in the `webpack.config.js`
 
-The page will reload if you make edits.<br />
+### `yarn test` - Compile and lint the code - unit tests are missiong.
+### `yarn lint` - Launches the ESLint (lint:code) and the StyleLint (lint:css) together.
+### `yarn lint:code` - ESLint - Code linter
+### `yarn lint:css` - Stylelint - Code linter
 
-### `yarn lint` Launches the ESLint (lint:code) and the StyleLint (lint:css) together.
-### `yarn lint:code` ESLint - Code linter
-### `yarn lint:css` Stylelint - Code linter
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-The build is minified and bundled into a single js file. The sourcemap "bundle.js.map" is only for debugging purpose and not necessary for deployment.<br />
-
+### `yarn build` - Builds the app for production to the `build` folder.
+### `yarn build:tsc` - Compile typescript code.
