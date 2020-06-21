@@ -1,0 +1,54 @@
+import { createGlobalStyle, DefaultTheme } from 'styled-components';
+import { normalize } from 'styled-normalize';
+
+export const theme: DefaultTheme = {
+  Background: 'white',
+  Foreground: '#383838',
+  SubForeground: '#a0a0a0',
+  SubBorder: '#d4d4d4',
+
+  HighlightBackground: '#dadada',
+  HighlightForeground: '#383838',
+
+  SelectedBackground: '#28627a',
+  SelectedForeground: 'white',
+};
+
+export const themePrimary: DefaultTheme = {
+  Background: '#28627a',
+  Foreground: '#d7f3ff',
+  SubForeground: '#d7f3ff',
+  SubBorder: '#a0a0a0',
+
+  HighlightBackground: '#23566b',
+  HighlightForeground: '#d7f3ff',
+
+  SelectedBackground: '#28627a',
+  SelectedForeground: '#d7f3ff',
+};
+
+export const GlobalStyle = createGlobalStyle`
+  ${normalize}
+
+  html, body, #root {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    background: #edf0f2;
+    color: #383838;
+    fill: #383838;
+  }
+
+  body {
+    margin: 0;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  input, select {
+    font-family: inherit;
+    font-size: inherit;
+  }
+`;
