@@ -16,9 +16,9 @@ export const App: React.FC = () => (
     <GlobalStyle />
 
     <Wrapper>
-      <ThemeProvider theme={themePrimary}>
+      {/* <ThemeProvider theme={themePrimary}>
         <AppTitle />
-      </ThemeProvider>
+      </ThemeProvider> */}
 
       <ErrorBoundary>
         <Main />

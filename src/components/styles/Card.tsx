@@ -39,7 +39,13 @@ export const CardFooter = styled.div`
 export const CardSetting = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.8em;
+`;
+
+export const CardSettingPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0.8em;
+  margin-top: 1em;
 `;
 
 export const CardContainer = styled.div`

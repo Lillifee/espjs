@@ -5,7 +5,7 @@ const fontSize = {
   s: '0.8em',
   m: '1em',
   l: '1.5em',
-  xl: '3em',
+  xl: '2em',
 };
 
 export const theme: DefaultTheme = {

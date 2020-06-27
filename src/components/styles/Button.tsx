@@ -21,4 +21,11 @@ export const Button = styled.button`
     color: ${(props) => props.theme.SelectedForeground};
     fill: ${(props) => props.theme.SelectedForeground};
   }
+  :disabled {
+    cursor: default;
+    opacity: 0.8;
+    background: ${(props) => props.theme.Background};
+    color: ${(props) => props.theme.Foreground};
+    fill: ${(props) => props.theme.Foreground};
+  }
 `;

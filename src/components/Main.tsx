@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { PageLimiter } from './styles';
 import { Wifi } from './wifi/Wifi';
+import { Network } from './network/Network';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -21,7 +22,7 @@ export const Main: React.FC = () => (
     <PageLimiter>
       <Grid>
         <Wifi />
-        {/* <Network/> */}
+        <Network />
       </Grid>
     </PageLimiter>
   </Wrapper>
