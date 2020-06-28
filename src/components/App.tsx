@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { theme, GlobalStyle, themePrimary } from './theme';
-import { AppTitle } from './AppTitle';
+import { theme, GlobalStyle } from './theme';
 import { Main } from './Main';
 import { ErrorBoundary } from './common';
 
@@ -16,10 +15,6 @@ export const App: React.FC = () => (
     <GlobalStyle />
 
     <Wrapper>
-      {/* <ThemeProvider theme={themePrimary}>
-        <AppTitle />
-      </ThemeProvider> */}
-
       <ErrorBoundary>
         <Main />
       </ErrorBoundary>

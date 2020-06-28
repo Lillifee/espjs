@@ -9,31 +9,26 @@ const fontSize = {
 };
 
 export const theme: DefaultTheme = {
-  Background: 'white',
-  Foreground: '#383838',
-  SubForeground: '#a0a0a0',
-  SubBorder: '#d4d4d4',
+  Background: '#242424',
+  SubBackground: '#1d1d1d',
 
-  HighlightBackground: '#dadada',
-  HighlightForeground: '#383838',
+  Border: '#373737',
+  SubBorder: '#2c2c2c',
 
-  SelectedBackground: '#28627a',
-  SelectedForeground: 'white',
+  Foreground: '#e2e2e2',
+  SubForeground: '#a2a2a2',
 
-  FontSize: fontSize,
-};
+  HighlightBackground: '#373737',
+  HighlightForeground: '#e2e2e2',
 
-export const themePrimary: DefaultTheme = {
-  Background: '#28627a',
-  Foreground: '#d7f3ff',
-  SubForeground: '#d7f3ff',
-  SubBorder: '#a0a0a0',
+  SelectedBackground: '#323232',
+  SelectedForeground: '#e2e2e2',
 
-  HighlightBackground: '#23566b',
-  HighlightForeground: '#d7f3ff',
+  PrimaryBackground: '#78b956',
+  PrimarySubBackground: '#56aab9',
 
-  SelectedBackground: '#28627a',
-  SelectedForeground: '#d7f3ff',
+  PrimaryForeground: '#1d1d1d',
+  PrimarySubForeground: '#242424',
 
   FontSize: fontSize,
 };

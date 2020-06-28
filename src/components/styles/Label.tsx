@@ -10,7 +10,7 @@ export const SkeletonLine = styled.div`
 
   border-radius: 3px;
   background-size: 200%;
-  animation: gradient 2s ease infinite;
+  animation: gradient 2s ease infinite, fadein 1s ease;
   width: 6em;
 
   &::before {
@@ -29,13 +29,26 @@ export const SkeletonLine = styled.div`
       background-position: -100%;
     }
   }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
-export const Label = styled.div<LabelProps>`
+export const Label = styled.label<LabelProps>`
   font-size: ${({ size, theme }) => theme.FontSize[size || 'm']};
   margin: 0.2em 0;
 `;
 
 export const SubLabel = styled(Label)`
   color: ${(props) => props.theme.SubForeground};
+`;
+
+export const Space = styled.div`
+  margin-bottom: 1em;
 `;

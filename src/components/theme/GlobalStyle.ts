@@ -10,10 +10,6 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
     display: flex;
     flex-direction: column;
-
-    background: #edf0f2;
-    color: #383838;
-    fill: #383838;
   }
 
   body {

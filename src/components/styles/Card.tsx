@@ -1,32 +1,56 @@
 import styled from 'styled-components';
-import { Label } from './Label';
 
-export const Card = styled.div`
+export const CardContainer = styled.div`
+  flex: 1;
+
   display: flex;
+  position: relative;
   flex-direction: column;
-  background: #fff;
+  justify-content: flex-end;
   border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
   user-select: none;
-
+  min-height: 16em;
   &:hover {
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12), 0 5px 5px rgba(0, 0, 0, 0.22);
   }
 `;
 
-export const CardTitle = styled.div`
-  font-size: 1em;
-  margin: 0.8em;
+export const Card = styled.div`
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: ${(props) => props.theme.Background};
+  color: ${(props) => props.theme.Foreground};
 `;
 
 export const CardInfo = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.Background};
-  color: ${(props) => props.theme.Foreground};
-  padding: 0.5em 0.8em;
+  margin: 0.5em 0.8em;
+`;
+
+export const CardInfoContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4em;
+`;
+
+export const CardOverlay = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  z-index: 10;
 `;
 
 export const CardFooter = styled.div`
@@ -34,27 +58,9 @@ export const CardFooter = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 0.5em 0.8em;
-`;
 
-export const CardSetting = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const CardSettingPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 0.8em;
-  margin-top: 1em;
-`;
-
-export const CardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const CardSubInfo = styled(Label)`
-  align-self: flex-end;
+  background: ${(props) => props.theme.SubBackground};
+  color: ${(props) => props.theme.Foreground};
 `;
 
 export const CardFooterPanel = styled.div`
@@ -62,4 +68,24 @@ export const CardFooterPanel = styled.div`
   flex-direction: column;
   flex: 1;
   margin: 0 0.7em;
+`;
+
+export interface CardSettingsProps {
+  expanded: boolean;
+}
+
+export const CardSetting = styled.div<CardSettingsProps>`
+  display: flex;
+  flex-direction: column;
+  visibility: ${({ expanded }) => (expanded ? 'visible' : 'hidden')};
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.2);
+  margin-top: 3em;
+`;
+
+export const CardSettingPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0.8em;
+  margin-top: 1em;
 `;

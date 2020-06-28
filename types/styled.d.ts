@@ -6,8 +6,12 @@ declare module 'styled-components' {
   */
   export interface DefaultTheme {
     Background: string;
+    SubBackground: string;
+    Border: string;
+
     Foreground: string;
     SubForeground: string;
+
     SubBorder: string;
 
     HighlightBackground: string;
@@ -15,6 +19,12 @@ declare module 'styled-components' {
 
     SelectedBackground: string;
     SelectedForeground: string;
+
+    PrimaryBackground: string;
+    PrimarySubBackground: string;
+
+    PrimaryForeground: string;
+    PrimarySubForeground: string;
 
     FontSize: {
       xs: string;

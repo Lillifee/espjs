@@ -6,11 +6,12 @@ const toQueryString = <T>(obj: T) =>
     .map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value || ''))
     .join('&');
 
-interface FetchState<T> {
+export interface FetchState<T> {
   data: T;
   isLoading: boolean;
   isError: boolean;
   isUpdating: boolean;
+  isInitial?: boolean;
 }
 
 const createFetchSlice = <T>() => {
@@ -28,7 +29,8 @@ const createFetchSlice = <T>() => {
       case 'FETCH_INIT':
         return {
           ...state,
-          isLoading: true,
+          isLoading: state.isInitial ? true : false,
+          isInitial: false,
           isError: false,
           isUpdating: false,
         };
@@ -43,7 +45,7 @@ const createFetchSlice = <T>() => {
       case 'FETCH_FAILURE':
         return {
           ...state,
-          isLoading: false,
+          isLoading: true,
           isError: true,
           isUpdating: false,
         };
@@ -76,6 +78,7 @@ export const useFetch = <T>(
     isLoading: false,
     isUpdating: false,
     isError: false,
+    isInitial: true,
     data: initialData,
   });
 
