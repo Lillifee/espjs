@@ -90,7 +90,7 @@ export const WifiStatus: React.FC<WifiStatusProps> = ({ state }) => {
 
           <Space />
 
-          <SubLabel size="s">DURATION</SubLabel>
+          <SubLabel size="s">CONNECTION TIME</SubLabel>
           <Label size="m">{state.isLoading ? <SkeletonLine /> : `${state.data.time} ms`}</Label>
         </CardInfoContent>
       </CardInfo>

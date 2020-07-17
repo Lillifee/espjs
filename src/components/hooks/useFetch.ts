@@ -9,9 +9,6 @@ const toQueryString = <T>(obj: T) =>
 export interface FetchState<T> {
   data: T;
   isLoading: boolean;
-  isError: boolean;
-  isUpdating: boolean;
-  isInitial?: boolean;
 }
 
 const createFetchSlice = <T>() => {
@@ -29,32 +26,23 @@ const createFetchSlice = <T>() => {
       case 'FETCH_INIT':
         return {
           ...state,
-          isLoading: state.isInitial ? true : false,
-          isInitial: false,
-          isError: false,
-          isUpdating: false,
+          isLoading: state.isLoading ? true : false,
         };
       case 'FETCH_SUCCESS':
         return {
           ...state,
           isLoading: false,
-          isError: false,
-          isUpdating: false,
           data: action.payload,
         };
       case 'FETCH_FAILURE':
         return {
           ...state,
           isLoading: true,
-          isError: true,
-          isUpdating: false,
         };
       case 'FETCH_UPDATE':
         return {
           ...state,
           isLoading: true,
-          isError: false,
-          isUpdating: true,
           data: { ...state.data, ...action.payload },
         };
       default:
@@ -74,11 +62,9 @@ export const useFetch = <T>(
   updateInterval?: number,
 ): { state: FetchState<T>; refresh: () => void; update: (data: Partial<T>) => void } => {
   const { reducer, actions } = useMemo(() => createFetchSlice<T>(), []);
+
   const [state, dispatch] = useReducer(reducer, {
-    isLoading: false,
-    isUpdating: false,
-    isError: false,
-    isInitial: true,
+    isLoading: true,
     data: initialData,
   });
 
@@ -89,9 +75,13 @@ export const useFetch = <T>(
 
     await fetch(url, { signal: abort.current.signal })
       .then((res) => res.json().then((json) => dispatch(actions.FETCH_SUCCESS(json))))
-      .catch((error) => !abort.current.signal.aborted && dispatch(actions.FETCH_FAILURE(error)));
-
-    updateInterval && setTimeout(() => fetchData(), updateInterval);
+      .then(() => updateInterval && setTimeout(() => fetchData(), updateInterval))
+      .catch((error) => {
+        if (!abort.current.signal.aborted) {
+          dispatch(actions.FETCH_FAILURE(error));
+          setTimeout(() => fetchData(), 5000);
+        }
+      });
   }, [abort]);
 
   useEffect(() => {
