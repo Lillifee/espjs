@@ -55,11 +55,11 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({ state }) => {
   return (
     <Card>
       <CardInfo>
-        <Label size="s">Network</Label>
+        <Label fontSize="s">Network</Label>
 
         <CardInfoContent>
-          <SubLabel size="s">{state.isLoading ? <SkeletonLine /> : state.data.mode.toUpperCase()} </SubLabel>
-          <Label size="l">{state.isLoading ? <SkeletonLine /> : state.data.ipv4} </Label>
+          <SubLabel fontSize="s">{state.isLoading ? <SkeletonLine /> : state.data.mode.toUpperCase()} </SubLabel>
+          <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : state.data.ipv4} </Label>
         </CardInfoContent>
       </CardInfo>
     </Card>
@@ -92,13 +92,13 @@ export const NetworkSettings: React.FC<NetworkSettingsProps> = ({ state, update 
 
           <Space />
 
-          <SubLabel size="xs">IP Address</SubLabel>
+          <SubLabel fontSize="xs">IP Address</SubLabel>
           <Input disabled={isDhcp} value={data.ipv4} onChange={setInput('ipv4')} />
 
-          <SubLabel size="xs">Subnet Mask</SubLabel>
+          <SubLabel fontSize="xs">Subnet Mask</SubLabel>
           <Input disabled={isDhcp} value={data.subnet} onChange={setInput('subnet')} />
 
-          <SubLabel size="xs">Default Gateway</SubLabel>
+          <SubLabel fontSize="xs">Default Gateway</SubLabel>
           <Input disabled={isDhcp} value={data.gateway} onChange={setInput('gateway')} />
 
           <Button
@@ -117,10 +117,14 @@ export const NetworkSettings: React.FC<NetworkSettingsProps> = ({ state, update 
         <RoundIcon type="Settings" />
         <CardFooterPanel>
           <Label>Configuration</Label>
-          <SubLabel size="s">Static IP Address</SubLabel>
+          <SubLabel fontSize="s">Static IP Address</SubLabel>
         </CardFooterPanel>
 
-        <ButtonIcon type={expanded ? 'ArrowDown' : 'ArrowUp'} onClick={() => setExpanded(!expanded)} />
+        <ButtonIcon
+          disabled={state.isLoading}
+          type={expanded ? 'ArrowDown' : 'ArrowUp'}
+          onClick={() => setExpanded(!expanded)}
+        />
       </CardFooter>
     </CardOverlay>
   );

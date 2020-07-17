@@ -78,20 +78,20 @@ export const WifiStatus: React.FC<WifiStatusProps> = ({ state }) => {
   return (
     <Card>
       <CardInfo>
-        <Label size="s">WIFI</Label>
+        <Label fontSize="s">WIFI</Label>
         <CardInfoContent>
           <WifiGauge>
             <Gauge value={percentage} />
             <WifiGaugeDisplay>
-              <Label size="s">{state.isLoading ? <SkeletonLine /> : `${state.data.rssi} dBm`} </Label>
-              <Label size="l">{state.isLoading ? <SkeletonLine /> : signal}</Label>
+              <Label fontSize="s">{state.isLoading ? <SkeletonLine /> : `${state.data.rssi} dBm`} </Label>
+              <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : signal}</Label>
             </WifiGaugeDisplay>
           </WifiGauge>
 
           <Space />
 
-          <SubLabel size="s">CONNECTION TIME</SubLabel>
-          <Label size="m">{state.isLoading ? <SkeletonLine /> : `${state.data.time} ms`}</Label>
+          <SubLabel fontSize="s">CONNECTION</SubLabel>
+          <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.time} ms`}</Label>
         </CardInfoContent>
       </CardInfo>
     </Card>
@@ -113,13 +113,13 @@ export const WifiSettings: React.FC<WifiSettingsProps> = ({ state, update }) => 
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
-          <SubLabel size="xs">Host</SubLabel>
+          <SubLabel fontSize="xs">Host</SubLabel>
           <Input value={data.host} onChange={setInput('host')} />
 
-          <SubLabel size="xs">SSID</SubLabel>
+          <SubLabel fontSize="xs">SSID</SubLabel>
           <Input value={data.ssid} onChange={setInput('ssid')} />
 
-          <SubLabel size="xs">Password</SubLabel>
+          <SubLabel fontSize="xs">Password</SubLabel>
           <Input type="Password" value={data.password} onChange={setInput('password')} />
 
           <Button
@@ -139,10 +139,14 @@ export const WifiSettings: React.FC<WifiSettingsProps> = ({ state, update }) => 
 
         <CardFooterPanel>
           <Label>{state.isLoading ? <SkeletonLine /> : state.data?.ssid}</Label>
-          <SubLabel size="s">{state.isLoading ? <SkeletonLine /> : state.data?.host}</SubLabel>
+          <SubLabel fontSize="s">{state.isLoading ? <SkeletonLine /> : state.data?.host}</SubLabel>
         </CardFooterPanel>
 
-        <ButtonIcon type={expanded ? 'ArrowDown' : 'ArrowUp'} onClick={() => setExpanded(!expanded)} />
+        <ButtonIcon
+          disabled={state.isLoading}
+          type={expanded ? 'ArrowDown' : 'ArrowUp'}
+          onClick={() => setExpanded(!expanded)}
+        />
       </CardFooter>
     </CardOverlay>
   );

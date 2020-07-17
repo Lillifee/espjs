@@ -46,6 +46,11 @@ export const CardInfoContent = styled.div`
   margin-bottom: 4em;
 `;
 
+export const CardInfoContentStretch = styled(CardInfoContent)`
+  justify-content: stretch;
+  align-items: stretch;
+`;
+
 export const CardOverlay = styled.div`
   display: flex;
   flex-direction: column;
@@ -88,4 +93,21 @@ export const CardSettingPanel = styled.div`
   flex-direction: column;
   margin: 0.8em;
   margin-top: 1em;
+`;
+
+export const CardInfoGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: row;
+  grid-gap: 0.1em;
+  align-items: center;
+  flex: 1;
+`;
+
+export const CardInfoState = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
 `;

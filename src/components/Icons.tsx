@@ -89,6 +89,10 @@ export const ButtonIcon = styled(ButtonIconElement)`
   padding: 3px;
   cursor: pointer;
 
+  :disabled {
+    opacity: 0.5;
+  }
+
   :hover {
     background: ${(props) => props.theme.HighlightBackground};
     color: ${(props) => props.theme.HighlightForeground};

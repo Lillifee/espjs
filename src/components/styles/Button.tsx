@@ -1,33 +1,40 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const activeMixin = css`
+  background: ${(p) => p.theme.PrimarySubBackground};
+  color: ${(p) => p.theme.PrimarySubForeground};
+  fill: ${(p) => p.theme.PrimarySubForeground};
+`;
 
 export const Button = styled.button`
   outline: 0;
   border: 1px solid;
-  border-color: ${(props) => props.theme.PrimaryBackground};
-  background: ${(props) => props.theme.Background};
-  color: ${(props) => props.theme.Foreground};
-  fill: ${(props) => props.theme.Foreground};
+  border-color: ${(p) => p.theme.PrimarySubBackground};
+  background: ${(p) => p.theme.Background};
+  color: ${(p) => p.theme.Foreground};
+  fill: ${(p) => p.theme.Foreground};
   padding: 5em;
   padding-top: 0.7em;
   padding-bottom: 0.5em;
   cursor: pointer;
 
   :hover {
-    background: ${(props) => props.theme.HighlightBackground};
-    color: ${(props) => props.theme.HighlightForeground};
-    fill: ${(props) => props.theme.HighlightForeground};
+    background: ${(p) => p.theme.HighlightBackground};
+    color: ${(p) => p.theme.HighlightForeground};
+    fill: ${(p) => p.theme.HighlightForeground};
   }
+
+  &.active,
   :active {
-    background: ${(props) => props.theme.PrimarySubBackground};
-    color: ${(props) => props.theme.PrimaryForeground};
-    fill: ${(props) => props.theme.PrimaryForeground};
+    ${activeMixin}
   }
+
   :disabled {
     cursor: default;
     visibility: hidden;
     opacity: 0.8;
-    background: ${(props) => props.theme.Background};
-    color: ${(props) => props.theme.Foreground};
-    fill: ${(props) => props.theme.Foreground};
+    background: ${(p) => p.theme.Background};
+    color: ${(p) => p.theme.Foreground};
+    fill: ${(p) => p.theme.Foreground};
   }
 `;

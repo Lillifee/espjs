@@ -22,7 +22,7 @@ const SemiCircle = styled.div`
   width: 200px;
   height: 100px;
 
-  background: ${({ theme }) => theme.PrimaryBackground};
+  background: ${({ theme }) => theme.PrimarySubBackground};
 
   border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
 

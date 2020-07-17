@@ -5,6 +5,7 @@ import { Wifi } from './widgets/Wifi';
 import { Network } from './widgets/Network';
 import { Update } from './widgets/Update';
 import { Esp } from './widgets/Esp';
+import { Mpu } from './widgets/Mpu';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -15,7 +16,7 @@ const Wrapper = styled.section`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-gap: 0.8em;
   padding: 0.8em;
 `;
@@ -24,6 +25,7 @@ export const Main: React.FC = () => (
   <Wrapper>
     <PageLimiter>
       <Grid>
+        <Mpu />
         <Wifi />
         <Network />
         <Esp />

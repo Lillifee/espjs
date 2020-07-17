@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Label } from '.';
+import { Label, LabelProps } from '.';
 
-export const Input = styled.input`
+export const Input = styled.input<LabelProps>`
   border: 0;
   outline: 0;
   border-bottom: 1px solid;
@@ -11,6 +11,7 @@ export const Input = styled.input`
   background: transparent;
   margin-bottom: 1em;
   margin-top: 0.2em;
+  font-size: ${({ fontSize, theme }) => theme.FontSize[fontSize || 'm']};
 
   :disabled {
     opacity: 0.5;
@@ -39,7 +40,7 @@ const RadioMark = styled.span`
 
     display: block;
     opacity: 0;
-    background-color: ${(props) => props.theme.PrimaryBackground};
+    background-color: ${(props) => props.theme.PrimarySubBackground};
     left: 2px;
     top: 2px;
     width: 10px;
@@ -75,7 +76,7 @@ export type RadioProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 export const Radio: React.FC<RadioProps> = ({ children, ...rest }) => (
   <RadioWrapper>
-    <RadioLabel size="s">
+    <RadioLabel fontSize="s">
       <RadioElement type="radio" {...rest} />
       <RadioMark />
       <RadioContent>{children}</RadioContent>

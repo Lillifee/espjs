@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CardContainer, Card, CardInfo } from '../styles';
+import { CardContainer, Card, CardInfo, CardInfoGrid, CardInfoState } from '../styles';
 import { Label, SkeletonLine, SubLabel } from '../styles';
 import { useFetch } from '../hooks';
 import styled from 'styled-components';
@@ -18,26 +18,9 @@ const initSettings: ApiEsp = {
   sketchSizeFree: 0,
 };
 
-const CardInfoGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-flow: row;
-  grid-gap: 0.1em;
-  align-items: center;
-  flex: 1;
-`;
-
-const CardInfoState = styled.div`
+export const CardInfoContentFullStretch = styled.div`
   flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
-`;
-
-const EspCardInfo = styled.div`
-  display: flex;
-  flex: 1;
 `;
 
 const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
@@ -60,33 +43,35 @@ export const Esp: React.FC = () => {
     <CardContainer>
       <Card>
         <CardInfo>
-          <Label size="s">Status</Label>
+          <Label fontSize="s">Status</Label>
 
-          <EspCardInfo>
+          <CardInfoContentFullStretch>
             <CardInfoGrid>
               <CardInfoState>
-                <SubLabel size="s">CPU FREQUENCY</SubLabel>
-                <Label size="l">{state.isLoading ? <SkeletonLine /> : `${state.data.cupFreq} Hz`} </Label>
+                <SubLabel fontSize="s">CPU FREQUENCY</SubLabel>
+                <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.cupFreq} Hz`} </Label>
               </CardInfoState>
 
               <CardInfoState>
-                <SubLabel size="s">FREE HEAP</SubLabel>
-                <Label size="l">{state.isLoading ? <SkeletonLine /> : formatNumber(state.data.heap, 'B')} </Label>
+                <SubLabel fontSize="s">FREE HEAP</SubLabel>
+                <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : formatNumber(state.data.heap, 'B')} </Label>
               </CardInfoState>
 
               <CardInfoState>
-                <SubLabel size="s">FREE SKETCH SIZE</SubLabel>
-                <Label size="l">
+                <SubLabel fontSize="s">FREE SKETCH SIZE</SubLabel>
+                <Label fontSize="m">
                   {state.isLoading ? <SkeletonLine /> : formatNumber(state.data.sketchSizeFree, 'B')}
                 </Label>
               </CardInfoState>
 
               <CardInfoState>
-                <SubLabel size="s">SKETCH SIZE</SubLabel>
-                <Label size="l">{state.isLoading ? <SkeletonLine /> : formatNumber(state.data.sketchSize, 'B')} </Label>
+                <SubLabel fontSize="s">SKETCH SIZE</SubLabel>
+                <Label fontSize="m">
+                  {state.isLoading ? <SkeletonLine /> : formatNumber(state.data.sketchSize, 'B')}{' '}
+                </Label>
               </CardInfoState>
             </CardInfoGrid>
-          </EspCardInfo>
+          </CardInfoContentFullStretch>
         </CardInfo>
       </Card>
     </CardContainer>

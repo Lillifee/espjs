@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export interface LabelProps {
-  size?: 'xs' | 's' | 'm' | 'l' | 'xl';
+  fontSize?: 'xs' | 's' | 'm' | 'l' | 'xl';
 }
 
 export const SkeletonLine = styled.div`
@@ -41,7 +41,8 @@ export const SkeletonLine = styled.div`
 `;
 
 export const Label = styled.label<LabelProps>`
-  font-size: ${({ size, theme }) => theme.FontSize[size || 'm']};
+  color: ${(p) => p.theme.Foreground};
+  font-size: ${({ fontSize, theme }) => theme.FontSize[fontSize || 'm']};
   margin: 0.2em 0;
 `;
 

@@ -54,14 +54,14 @@ export const Update: React.FC = () => {
     <CardContainer>
       <Card>
         <CardInfo>
-          <Label size="s">Update</Label>
+          <Label fontSize="s">Update</Label>
           <CardInfoContent>
             {isUploading ? (
               <Loading />
             ) : (
               <React.Fragment>
-                <SubLabel size="s">VERSION</SubLabel>
-                <Label size="l">v1.0.0</Label>
+                <SubLabel fontSize="s">VERSION</SubLabel>
+                <Label fontSize="l">v1.0.0</Label>
               </React.Fragment>
             )}
           </CardInfoContent>
@@ -72,7 +72,7 @@ export const Update: React.FC = () => {
           <RoundIcon type="Upload" />
           <CardFooterPanel>
             <Label>Update</Label>
-            <SubLabel size="s">Firmware and website</SubLabel>
+            <SubLabel fontSize="s">Firmware and website</SubLabel>
           </CardFooterPanel>
 
           <FileUploadButton icon="Memory" url="/api/update" upload={upload} />
