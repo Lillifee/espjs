@@ -12,9 +12,9 @@ Settings
 
 ## Available Scripts
 
-Use yarn start 
+Use yarn or npm to start the corresponding script. e.g. `yarn start`
 
-| Command          | Second Header |
+| Command          | Description   |
 | ---------------- | ------------- |
 | start            | Runs the app in the development mode. The development server redirect all `/api` requests to `cube.local`. If your ESP is running on a different address, you can adjust the proxy server in the `webpack.config.js`  |
 | lint             | Launches the ESLint (lint:code) and the StyleLint (lint:css) together |
