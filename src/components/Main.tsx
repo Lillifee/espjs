@@ -6,6 +6,8 @@ import { Network } from './widgets/Network';
 import { Update } from './widgets/Update';
 import { Esp } from './widgets/Esp';
 import { Mpu } from './widgets/Mpu';
+import { Co2 } from './widgets/Co2';
+import { Bme } from './widgets/BME';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -25,7 +27,9 @@ export const Main: React.FC = () => (
   <Wrapper>
     <PageLimiter>
       <Grid>
-        <Mpu />
+        {/* <Mpu /> */}
+        <Co2 />
+        <Bme />
         <Wifi />
         <Network />
         <Esp />
