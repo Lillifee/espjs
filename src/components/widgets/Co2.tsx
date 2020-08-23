@@ -93,11 +93,6 @@ export const Co2Status: React.FC<Co2StatusProps> = ({ state }) => {
               <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : quality}</Label>
             </Co2GaugeGaugeDisplay>
           </Co2Gauge>
-
-          <Space />
-
-          {/* <SubLabel fontSize="s">CONNECTION</SubLabel>
-          <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.} ms`}</Label> */}
         </CardInfoContent>
       </CardInfo>
     </Card>

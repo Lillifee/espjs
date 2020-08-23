@@ -28,9 +28,9 @@ export const Main: React.FC = () => (
   <Wrapper>
     <PageLimiter>
       <Grid>
-        {/* <Mpu /> */}
-        <Co2 />
-        <Bsec />
+        <Mpu />
+        {/* <Co2 /> */}
+        {/* <Bsec /> */}
         {/* <Bme /> */}
         <Wifi />
         <Network />

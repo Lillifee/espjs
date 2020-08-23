@@ -29,12 +29,8 @@ export interface ApiMpuSettings {
   duration: number;
   threshold: number;
 
-  sideUrl0: string;
-  sideUrl1: string;
-  sideUrl2: string;
-  sideUrl3: string;
-  sideUrl4: string;
-  sideUrl5: string;
+  host: string;
+  port: number;
 }
 
 const initSettings: ApiMpuSettings = {
@@ -43,12 +39,8 @@ const initSettings: ApiMpuSettings = {
   setupDuration: 0,
   duration: 0,
   threshold: 0,
-  sideUrl0: '',
-  sideUrl1: '',
-  sideUrl2: '',
-  sideUrl3: '',
-  sideUrl4: '',
-  sideUrl5: '',
+  host: '',
+  port: 0,
 };
 
 const sideArray = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -135,8 +127,6 @@ export interface MpuSettingsProps {
 export const MpuSettings: React.FC<MpuSettingsProps> = ({ state, update }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [userInput, setInput, clearUserInput] = useUserInput<ApiMpuSettings>();
-  const [activeSide, setActiveSide] = React.useState<number>(0);
-  const activeSideField = `sideUrl${activeSide}` as keyof ApiMpuSettings;
 
   const data = React.useMemo<Partial<ApiMpuSettings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
 
@@ -144,18 +134,11 @@ export const MpuSettings: React.FC<MpuSettingsProps> = ({ state, update }) => {
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
-          <ButtonGrid>
-            {[...Array(6).keys()].map((x) => (
-              <SideButton key={x} active={x === activeSide} onClick={() => setActiveSide(x)}>
-                {sideArray[x]}
-              </SideButton>
-            ))}
-          </ButtonGrid>
+          <SubLabel fontSize="xs">UDP Host</SubLabel>
+          <Input value={data.host} onChange={setInput('host')} />
 
-          <Space />
-
-          <SubLabel fontSize="xs">Side {sideArray[activeSide]} URL</SubLabel>
-          <Input fontSize="xs" value={data[activeSideField]} onChange={setInput(activeSideField)} />
+          <SubLabel fontSize="xs">UDP Port</SubLabel>
+          <Input value={data.port} onChange={setInput('port')} />
 
           <Space />
           <Space />
