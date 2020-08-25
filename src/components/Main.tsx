@@ -9,6 +9,7 @@ import { Mpu } from './widgets/Mpu';
 import { Co2 } from './widgets/Co2';
 import { Bme } from './widgets/Bme';
 import { Bsec } from './widgets/Bsec';
+import { Waveshare } from './widgets/Waveshare';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -28,10 +29,11 @@ export const Main: React.FC = () => (
   <Wrapper>
     <PageLimiter>
       <Grid>
-        <Mpu />
+        {/* <Mpu /> */}
         {/* <Co2 /> */}
         {/* <Bsec /> */}
         {/* <Bme /> */}
+        <Waveshare />
         <Wifi />
         <Network />
         <Esp />

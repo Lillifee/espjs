@@ -39,7 +39,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: {
-          host: 'cube.local',
+          host: '192.168.3.33',
           protocol: 'http:',
         },
         pathRewrite: {

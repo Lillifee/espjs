@@ -128,7 +128,7 @@ export const Co2Settings: React.FC<Co2SettingsProps> = ({ state, update }) => {
           <Input value={data.autoCalibration ? '1' : '0'} onChange={setInput('autoCalibration')} /> 
           */}
 
-          <Button onClick={() => fetch('/api/co2/calibrate').then()}>Calibrate</Button>
+          <Button onClick={() => fetch('/api/co2Calibrate').then()}>Calibrate</Button>
 
           <Button
             disabled={!userInput}

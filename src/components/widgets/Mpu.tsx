@@ -98,27 +98,6 @@ export const MpuStatus: React.FC<MpuStatusProps> = ({ state }) => {
   );
 };
 
-const ButtonGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-auto-flow: row;
-  grid-gap: 1em;
-  align-items: center;
-  justify-self: center;
-  align-self: center;
-  flex: 1;
-`;
-
-interface SideButtonProps {
-  active?: boolean;
-}
-
-export const SideButton = styled(Button).attrs<SideButtonProps>((p) => ({
-  className: p.active ? 'active' : '',
-}))<SideButtonProps>`
-  padding: 1.3em 2em;
-`;
-
 export interface MpuSettingsProps {
   state: FetchState<ApiMpuSettings>;
   update: (data: Partial<ApiMpuSettings>) => void;
