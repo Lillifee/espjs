@@ -17,11 +17,15 @@ import { useUserInput, useFetch, FetchState } from '../hooks';
 
 export interface ApiWaveshareSettings {
   host: string;
+  user: string;
+  password: string;
   updateInterval: number;
 }
 
 const initSettings: ApiWaveshareSettings = {
   host: '',
+  user: '',
+  password: '',
   updateInterval: 60,
 };
 
@@ -74,6 +78,12 @@ export const WaveshareSettings: React.FC<WaveshareSettingsProps> = ({ state, upd
         <CardSettingPanel>
           <SubLabel fontSize="xs">Url</SubLabel>
           <Input value={data.host} onChange={setInput('host')} />
+
+          <SubLabel fontSize="xs">User</SubLabel>
+          <Input value={data.user} onChange={setInput('user')} />
+
+          <SubLabel fontSize="xs">Password</SubLabel>
+          <Input type="Password" value={data.password} onChange={setInput('password')} />
 
           <SubLabel fontSize="xs">Update interval (minutes)</SubLabel>
           <Input value={data.updateInterval} onChange={setInput('updateInterval')} />
