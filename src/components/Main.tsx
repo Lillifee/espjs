@@ -10,6 +10,7 @@ import { Co2 } from './widgets/Co2';
 import { Bme } from './widgets/Bme';
 import { Bsec } from './widgets/Bsec';
 import { Waveshare } from './widgets/Waveshare';
+import { Knob } from './widgets/Knob';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -33,7 +34,8 @@ export const Main: React.FC = () => (
         {/* <Co2 /> */}
         {/* <Bsec /> */}
         {/* <Bme /> */}
-        <Waveshare />
+        {/* <Waveshare /> */}
+        <Knob />
         <Wifi />
         <Network />
         <Esp />
