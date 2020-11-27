@@ -18,7 +18,6 @@ import {
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
 import { useFetch, FetchState, useUserInput } from '../hooks';
-import styled from 'styled-components';
 import { WifiGauge, WifiGaugeDisplay } from './Wifi';
 import { Gauge } from '../common';
 
@@ -48,19 +47,6 @@ export const Knob: React.FC = () => {
     </CardContainer>
   );
 };
-
-const LabelSide = styled(Label)`
-  display: flex;
-  background: ${(props) => props.theme.PrimarySubBackground};
-  color: ${(props) => props.theme.PrimarySubForeground};
-  border-radius: 10px;
-
-  width: 4em;
-  height: 4em;
-
-  justify-content: center;
-  align-items: center;
-`;
 
 export interface KnobStatusProps {
   state: FetchState<ApiKnobSettings>;
