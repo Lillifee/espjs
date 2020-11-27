@@ -120,7 +120,7 @@ export const WifiSettings: React.FC<WifiSettingsProps> = ({ state, update }) => 
           <Input value={data.ssid} onChange={setInput('ssid')} />
 
           <SubLabel fontSize="xs">Password</SubLabel>
-          <Input type="Password" value={data.password} onChange={setInput('password')} />
+          <Input type="Password" value={data.password || ''} onChange={setInput('password')} />
 
           <Button
             disabled={!userInput}

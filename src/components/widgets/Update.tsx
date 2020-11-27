@@ -18,6 +18,7 @@ const FileInput = styled.input`
   position: absolute;
   width: 0;
   height: 0;
+  visibility: hidden;
 `;
 
 const useUploadFile = (): [(url: RequestInfo, file?: File) => void, boolean] => {

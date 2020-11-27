@@ -19,6 +19,8 @@ import {
 import { RoundIcon, ButtonIcon } from '../Icons';
 import { useFetch, FetchState, useUserInput } from '../hooks';
 import styled from 'styled-components';
+import { WifiGauge, WifiGaugeDisplay } from './Wifi';
+import { Gauge } from '../common';
 
 export interface ApiKnobSettings {
   value: number;
@@ -37,7 +39,7 @@ const initSettings: ApiKnobSettings = {
 };
 
 export const Knob: React.FC = () => {
-  const { state, update } = useFetch<ApiKnobSettings>('/api/knob', initSettings, 3000);
+  const { state, update } = useFetch<ApiKnobSettings>('/api/knob', initSettings, 1000);
 
   return (
     <CardContainer>
@@ -68,12 +70,17 @@ export const KnobStatus: React.FC<KnobStatusProps> = ({ state }) => {
   return (
     <Card>
       <CardInfo>
-        <Label fontSize="s">Cube</Label>
+        <Label fontSize="s">Knob</Label>
 
         <CardInfoContent>
-          <LabelSide fontSize="xl">{state.isLoading ? '#' : state.data.value} </LabelSide>
+          <WifiGauge>
+            <Gauge value={state.data.value} />
+            <WifiGaugeDisplay>
+              <Label fontSize="s">VALUE</Label>
+              <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : `${state.data.value}`}</Label>
+            </WifiGaugeDisplay>
+          </WifiGauge>
 
-          <Space />
           <Space />
 
           <SubLabel fontSize="s">SETUP</SubLabel>

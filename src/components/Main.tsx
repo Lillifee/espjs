@@ -7,10 +7,10 @@ import { Update } from './widgets/Update';
 import { Esp } from './widgets/Esp';
 import { Mpu } from './widgets/Mpu';
 import { Co2 } from './widgets/Co2';
-import { Bme } from './widgets/Bme';
 import { Bsec } from './widgets/Bsec';
 import { Waveshare } from './widgets/Waveshare';
 import { Knob } from './widgets/Knob';
+import { useFetch } from './hooks';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -26,21 +26,37 @@ const Grid = styled.div`
   padding: 0.8em;
 `;
 
-export const Main: React.FC = () => (
-  <Wrapper>
-    <PageLimiter>
-      <Grid>
-        {/* <Mpu /> */}
-        {/* <Co2 /> */}
-        {/* <Bsec /> */}
-        {/* <Bme /> */}
-        {/* <Waveshare /> */}
-        <Knob />
-        <Wifi />
-        <Network />
-        <Esp />
-        <Update />
-      </Grid>
-    </PageLimiter>
-  </Wrapper>
-);
+export interface ApiApplication {
+  application?: 'cube' | 'co2' | 'display' | 'knob';
+}
+
+export const Main: React.FC = () => {
+  const { state } = useFetch<ApiApplication>('/api/application', {});
+  const application = state.data.application;
+
+  return (
+    <Wrapper>
+      <PageLimiter>
+        <Grid>
+          {application === 'cube' && <Mpu />}
+          {application === 'co2' && (
+            <React.Fragment>
+              <Co2 />
+              <Bsec />
+            </React.Fragment>
+          )}
+          {application === 'display' && <Waveshare />}
+          {application === 'knob' && <Knob />}
+          {application && (
+            <React.Fragment>
+              <Wifi />
+              <Network />
+              <Esp />
+              <Update />
+            </React.Fragment>
+          )}
+        </Grid>
+      </PageLimiter>
+    </Wrapper>
+  );
+};
