@@ -4,6 +4,7 @@ export function useUserInput<T>(): [
   Partial<T> | undefined,
   (key: keyof T) => (e: React.ChangeEvent<HTMLInputElement>) => void,
   () => void,
+  React.Dispatch<React.SetStateAction<Partial<T> | undefined>>,
 ] {
   const [userInput, setUserInput] = useState<Partial<T>>();
 
@@ -12,5 +13,5 @@ export function useUserInput<T>(): [
 
   const clearUserInput = () => setUserInput(undefined);
 
-  return [userInput, updateUserInput, clearUserInput];
+  return [userInput, updateUserInput, clearUserInput, setUserInput];
 }

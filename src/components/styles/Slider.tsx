@@ -7,7 +7,7 @@ export const Slider = styled.input`
   appearance: none;
   outline: none;
 
-  border-radius: 10px;
+  border-radius: 15px;
   margin: 1em 0.5em;
   height: 1em;
   background: ${(props) => props.theme.SelectedBackground};
@@ -18,6 +18,7 @@ export const Slider = styled.input`
     width: 25px;
     height: 25px;
     background: ${(props) => props.theme.PrimarySubBackground};
+    border: 2px solid ${(props) => props.theme.Background};
     border-radius: 15px;
   }
 `;

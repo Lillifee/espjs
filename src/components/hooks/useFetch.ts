@@ -60,6 +60,7 @@ export const useFetch = <T>(
   url: RequestInfo,
   initialData: T,
   updateInterval?: number,
+  reloadOnUpdate?: boolean,
 ): { state: FetchState<T>; refresh: () => void; update: (data: Partial<T>) => void } => {
   const { reducer, actions } = useMemo(() => createFetchSlice<T>(), []);
 
@@ -93,9 +94,11 @@ export const useFetch = <T>(
     async (result: Partial<T>) => {
       dispatch(actions.FETCH_UPDATE(result));
       await fetch(`${url}?${toQueryString(result)}`);
-      setTimeout(() => window.location.reload(), 1000);
+      if (reloadOnUpdate) {
+        setTimeout(() => window.location.reload(), 1000);
+      }
     },
-    [url],
+    [url, reloadOnUpdate],
   );
 
   return { state, refresh: fetchData, update };

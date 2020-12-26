@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { CardContainer, Card, CardInfo, CardInfoContent, Space } from '../styles';
+import {
+  CardContainer,
+  Card,
+  CardInfo,
+  CardInfoGrid,
+  CardInfoState,
+  CardInfoContentStretch,
+  SliderValue,
+} from '../styles';
 import {
   Label,
   CardFooter,
@@ -12,10 +20,8 @@ import {
   CardSettingPanel,
   CardOverlay,
 } from '../styles';
-import styled from 'styled-components';
 import { RoundIcon, ButtonIcon } from '../Icons';
 import { useUserInput, useFetch, FetchState } from '../hooks';
-import { Gauge } from '../common';
 
 export interface ApiBsecSettings {
   host: string;
@@ -23,6 +29,7 @@ export interface ApiBsecSettings {
   requestInterval: number;
   setupDuration: number;
   requestDuration: number;
+  tempOffset: number;
   rtmp: number;
   pressure: number;
   rawHumidity: number;
@@ -42,6 +49,7 @@ const initSettings: ApiBsecSettings = {
   requestInterval: 0,
   setupDuration: 0,
   requestDuration: 0,
+  tempOffset: 0,
   rtmp: 0,
   pressure: 0,
   rawHumidity: 0,
@@ -66,21 +74,6 @@ export const Bsec: React.FC = () => {
   );
 };
 
-export const BsecGauge = styled.div`
-  display: flex;
-  justify-content: center;
-  position: relative;
-`;
-
-export const BsecGaugeGaugeDisplay = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  bottom: 1em;
-  z-index: 5;
-`;
-
 export interface BsecStatusProps {
   state: FetchState<ApiBsecSettings>;
 }
@@ -90,39 +83,73 @@ export const BsecStatus: React.FC<BsecStatusProps> = ({ state }) => {
 
   const iaq = state.data.iaq;
   if (iaq > 350) quality = 'Extremly polluted';
-  if (iaq < 350) quality = 'Severely polluted';
-  if (iaq < 250) quality = 'Heavily polluted';
-  if (iaq < 200) quality = 'Moderately polluted';
-  if (iaq < 150) quality = 'Lightly polluted';
+  if (iaq < 350) quality = 'Really bad';
+  if (iaq < 250) quality = 'Bad';
+  if (iaq < 200) quality = 'Moderate';
+  if (iaq < 150) quality = 'Fair';
   if (iaq < 100) quality = 'Good';
   if (iaq < 50) quality = 'Excellent';
-
-  const percentage = Math.min(iaq, 400) / 4;
 
   return (
     <Card>
       <CardInfo>
         <Label fontSize="s">Air quality</Label>
 
-        <CardInfoContent>
-          <BsecGauge>
-            <Gauge value={percentage} />
-            <BsecGaugeGaugeDisplay>
-              <Label fontSize="s">
-                {state.isLoading ? <SkeletonLine /> : `${iaq.toFixed(2)} / ${state.data.iaqAccuracy}`}
+        <CardInfoContentStretch>
+          <CardInfoGrid>
+            <CardInfoState>
+              <SubLabel fontSize="s">QUALITY</SubLabel>
+              <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : quality} </Label>
+            </CardInfoState>
+
+            <CardInfoState>
+              <SubLabel fontSize="s">IAQ</SubLabel>
+              <Label fontSize="l">
+                {state.isLoading ? <SkeletonLine /> : `${state.data.iaq.toFixed(0)} / ${state.data.iaqAccuracy}`}{' '}
               </Label>
-              <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : quality}</Label>
-            </BsecGaugeGaugeDisplay>
-          </BsecGauge>
+            </CardInfoState>
 
-          <Label fontSize="s">{state.isLoading ? <SkeletonLine /> : `Gas`} </Label>
-          <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.gasResistance} kΩ`} </Label>
+            <CardInfoState>
+              <SubLabel fontSize="s">TEMPERATURE</SubLabel>
+              <Label fontSize="m">
+                {state.isLoading ? <SkeletonLine /> : `${state.data.temperature.toFixed(2)} °C`}
+              </Label>
+            </CardInfoState>
 
-          <Space />
+            <CardInfoState>
+              <SubLabel fontSize="s">HUMIDITY</SubLabel>
+              <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.humidity.toFixed(2)} %`}</Label>
+            </CardInfoState>
 
-          <Label fontSize="s">{state.isLoading ? <SkeletonLine /> : `Humidity`} </Label>
-          <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.humidity.toFixed(2)} %`}</Label>
-        </CardInfoContent>
+            <CardInfoState>
+              <SubLabel fontSize="s">CO2eq</SubLabel>
+              <Label fontSize="m">
+                {state.isLoading ? <SkeletonLine /> : `${state.data.co2Equivalent.toFixed()} ppm`}
+              </Label>
+            </CardInfoState>
+
+            <CardInfoState>
+              <SubLabel fontSize="s">bVOCeq</SubLabel>
+              <Label fontSize="m">
+                {state.isLoading ? <SkeletonLine /> : `${state.data.breathVocEquivalent.toFixed(2)} ppm`}
+              </Label>
+            </CardInfoState>
+
+            <CardInfoState>
+              <SubLabel fontSize="s">Pressure</SubLabel>
+              <Label fontSize="m">
+                {state.isLoading ? <SkeletonLine /> : `${(state.data.pressure / 100).toFixed(2)} hPa`}{' '}
+              </Label>
+            </CardInfoState>
+
+            <CardInfoState>
+              <SubLabel fontSize="s">GAS</SubLabel>
+              <Label fontSize="m">
+                {state.isLoading ? <SkeletonLine /> : `${(state.data.gasResistance / 1000).toFixed(3)} kΩ`}{' '}
+              </Label>
+            </CardInfoState>
+          </CardInfoGrid>
+        </CardInfoContentStretch>
       </CardInfo>
     </Card>
   );
@@ -143,6 +170,9 @@ export const BsecSettings: React.FC<BsecSettingsProps> = ({ state, update }) => 
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
+          <SubLabel fontSize="xs">Temperature Offset</SubLabel>
+          <SliderValue min="0" max="20" step={0.2} value={data.tempOffset} onChange={setInput('tempOffset')} />
+
           <SubLabel fontSize="xs">UDP Host</SubLabel>
           <Input value={data.host} onChange={setInput('host')} />
 

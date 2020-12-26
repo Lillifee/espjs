@@ -7,10 +7,11 @@ import { Update } from './widgets/Update';
 import { Esp } from './widgets/Esp';
 import { Mpu } from './widgets/Mpu';
 import { Co2 } from './widgets/Co2';
-import { Bsec } from './widgets/Bsec';
 import { Waveshare } from './widgets/Waveshare';
 import { Knob } from './widgets/Knob';
 import { useFetch } from './hooks';
+import { Bsec } from './widgets/Bsec';
+import { Led } from './widgets/Led';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -27,7 +28,7 @@ const Grid = styled.div`
 `;
 
 export interface ApiApplication {
-  application?: 'cube' | 'co2' | 'display' | 'knob';
+  application?: 'cube' | 'co2' | 'display' | 'knob' | 'aqiLed';
 }
 
 export const Main: React.FC = () => {
@@ -42,6 +43,12 @@ export const Main: React.FC = () => {
           {application === 'co2' && (
             <React.Fragment>
               <Co2 />
+              <Bsec />
+            </React.Fragment>
+          )}
+          {application === 'aqiLed' && (
+            <React.Fragment>
+              <Led />
               <Bsec />
             </React.Fragment>
           )}
