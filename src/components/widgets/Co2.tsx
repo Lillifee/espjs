@@ -93,6 +93,10 @@ export const Co2Status: React.FC<Co2StatusProps> = ({ state }) => {
               <Label fontSize="l">{state.isLoading ? <SkeletonLine /> : quality}</Label>
             </Co2GaugeGaugeDisplay>
           </Co2Gauge>
+
+          <Space />
+          <SubLabel fontSize="s">TEMPERATURE</SubLabel>
+          <Label fontSize="m">{state.isLoading ? <SkeletonLine /> : `${state.data.temp.toFixed(2)} °C`}</Label>
         </CardInfoContent>
       </CardInfo>
     </Card>
@@ -128,7 +132,7 @@ export const Co2Settings: React.FC<Co2SettingsProps> = ({ state, update }) => {
           <Input value={data.autoCalibration ? '1' : '0'} onChange={setInput('autoCalibration')} /> 
           */}
 
-          <Button onClick={() => fetch('/api/co2Calibrate').then()}>Calibrate</Button>
+          <Button onClick={() => fetch('/api/co2Calibrate').then()}>Calibrate (400ppm)</Button>
 
           <Button
             disabled={!userInput}

@@ -27,41 +27,52 @@ const Grid = styled.div`
   padding: 0.8em;
 `;
 
+export type Application = 'cube' | 'co2' | 'display' | 'knob' | 'aqiLed';
+
 export interface ApiApplication {
-  application?: 'cube' | 'co2' | 'display' | 'knob' | 'aqiLed';
+  application?: Application;
 }
+
+export interface ApplicationSettings {
+  mpu?: boolean;
+  co2?: boolean;
+  bsec?: boolean;
+  led?: boolean;
+  waveshare?: boolean;
+  knob?: boolean;
+  sleep?: boolean;
+}
+
+const applicationSettings: Record<Application, ApplicationSettings> = {
+  cube: { sleep: true, mpu: true },
+  co2: { co2: true, bsec: true },
+  aqiLed: { led: true, bsec: true },
+  display: { waveshare: true, sleep: true },
+  knob: { knob: true, sleep: true },
+};
 
 export const Main: React.FC = () => {
   const { state } = useFetch<ApiApplication>('/api/application', {});
   const application = state.data.application;
 
+  if (!application) return null;
+  const settings = applicationSettings[application];
+
   return (
     <Wrapper>
       <PageLimiter>
         <Grid>
-          {application === 'cube' && <Mpu />}
-          {application === 'co2' && (
-            <React.Fragment>
-              <Co2 />
-              <Bsec />
-            </React.Fragment>
-          )}
-          {application === 'aqiLed' && (
-            <React.Fragment>
-              <Led />
-              <Bsec />
-            </React.Fragment>
-          )}
-          {application === 'display' && <Waveshare />}
-          {application === 'knob' && <Knob />}
-          {application && (
-            <React.Fragment>
-              <Wifi />
-              <Network />
-              <Esp />
-              <Update />
-            </React.Fragment>
-          )}
+          {settings.mpu && <Mpu />}
+          {settings.co2 && <Co2 />}
+          {settings.led && <Led />}
+          {settings.bsec && <Bsec />}
+          {settings.waveshare && <Waveshare />}
+          {settings.knob && <Knob />}
+
+          <Wifi />
+          <Network />
+          <Esp />
+          <Update sleep={settings.sleep} />
         </Grid>
       </PageLimiter>
     </Wrapper>

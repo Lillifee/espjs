@@ -49,7 +49,11 @@ const useUploadFile = (): [(url: RequestInfo, file?: File) => void, boolean] => 
   return [upload, isUploading];
 };
 
-export const Update: React.FC = () => {
+export interface UpdateProps {
+  sleep?: boolean;
+}
+
+export const Update: React.FC<UpdateProps> = ({ sleep }) => {
   const [upload, isUploading] = useUploadFile();
   return (
     <CardContainer>
@@ -62,7 +66,7 @@ export const Update: React.FC = () => {
             ) : (
               <React.Fragment>
                 <SubLabel fontSize="s">VERSION</SubLabel>
-                <Label fontSize="l">v1.0.0</Label>
+                <Label fontSize="l">v1.1.0</Label>
               </React.Fragment>
             )}
           </CardInfoContent>
@@ -78,7 +82,7 @@ export const Update: React.FC = () => {
 
           <FileUploadButton icon="Memory" url="/api/update" upload={upload} />
           <FileUploadButton icon="Website" url="/api/updateFS" upload={upload} />
-          <ButtonIcon type="Sleep" onClick={() => fetch('/api/sleep')} />
+          {sleep && <ButtonIcon type="Sleep" onClick={() => fetch('/api/sleep')} />}
         </CardFooter>
       </CardOverlay>
     </CardContainer>
