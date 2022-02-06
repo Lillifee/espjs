@@ -80,7 +80,7 @@ export const useFetch = <T>(
       .catch((error) => {
         if (!abort.current.signal.aborted) {
           dispatch(actions.FETCH_FAILURE(error));
-          setTimeout(() => fetchData(), 5000);
+          setTimeout(() => fetchData(), 100);
         }
       });
   }, [abort]);

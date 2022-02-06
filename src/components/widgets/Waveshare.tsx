@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CardContainer, Card, CardInfo, CardInfoContent, Space } from '../styles';
+import { CardContainer, Card, CardInfo, CardInfoContent } from '../styles';
 import {
   Label,
   CardFooter,
@@ -67,10 +67,10 @@ export const WaveshareSettings: React.FC<WaveshareSettingsProps> = ({ state, upd
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [userInput, setInput, clearUserInput] = useUserInput<ApiWaveshareSettings>();
 
-  const data = React.useMemo<Partial<ApiWaveshareSettings>>(() => ({ ...state.data, ...userInput }), [
-    state,
-    userInput,
-  ]);
+  const data = React.useMemo<Partial<ApiWaveshareSettings>>(
+    () => ({ ...state.data, ...userInput }),
+    [state, userInput],
+  );
 
   return (
     <CardOverlay>

@@ -12,6 +12,7 @@ import { Knob } from './widgets/Knob';
 import { useFetch } from './hooks';
 import { Bsec } from './widgets/Bsec';
 import { Led } from './widgets/Led';
+import { Loading } from './widgets/Loading';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -54,26 +55,27 @@ const applicationSettings: Record<Application, ApplicationSettings> = {
 export const Main: React.FC = () => {
   const { state } = useFetch<ApiApplication>('/api/application', {});
   const application = state.data.application;
-
-  if (!application) return null;
-  const settings = applicationSettings[application];
+  const settings = application ? applicationSettings[application] : undefined;
 
   return (
     <Wrapper>
       <PageLimiter>
-        <Grid>
-          {settings.mpu && <Mpu />}
-          {settings.co2 && <Co2 />}
-          {settings.led && <Led />}
-          {settings.bsec && <Bsec />}
-          {settings.waveshare && <Waveshare />}
-          {settings.knob && <Knob />}
-
-          <Wifi />
-          <Network />
-          <Esp />
-          <Update sleep={settings.sleep} />
-        </Grid>
+        {settings ? (
+          <Grid>
+            {settings.mpu && <Mpu />}
+            {settings.co2 && <Co2 />}
+            {settings.led && <Led />}
+            {settings.bsec && <Bsec />}
+            {settings.waveshare && <Waveshare />}
+            {settings.knob && <Knob />}
+            <Wifi />
+            <Network />
+            <Esp />
+            <Update sleep={settings.sleep} />
+          </Grid>
+        ) : (
+          <Loading />
+        )}
       </PageLimiter>
     </Wrapper>
   );
