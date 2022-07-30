@@ -13,6 +13,7 @@ import { useFetch } from './hooks';
 import { Bsec } from './widgets/Bsec';
 import { Led } from './widgets/Led';
 import { Loading } from './widgets/Loading';
+import { SplitFlapText } from './widgets/SplitFlapText';
 
 const Wrapper = styled.section`
   flex: 1;
@@ -28,7 +29,7 @@ const Grid = styled.div`
   padding: 0.8em;
 `;
 
-export type Application = 'cube' | 'co2' | 'display' | 'knob' | 'aqiLed';
+export type Application = 'cube' | 'co2' | 'display' | 'knob' | 'aqiLed' | 'splitFlap';
 
 export interface ApiApplication {
   application?: Application;
@@ -42,6 +43,7 @@ export interface ApplicationSettings {
   waveshare?: boolean;
   knob?: boolean;
   sleep?: boolean;
+  splitFlapText?: boolean;
 }
 
 const applicationSettings: Record<Application, ApplicationSettings> = {
@@ -50,6 +52,7 @@ const applicationSettings: Record<Application, ApplicationSettings> = {
   aqiLed: { led: true, bsec: true },
   display: { waveshare: true, sleep: true },
   knob: { knob: true, sleep: true },
+  splitFlap: { splitFlapText: true },
 };
 
 export const Main: React.FC = () => {
@@ -68,6 +71,7 @@ export const Main: React.FC = () => {
             {settings.bsec && <Bsec />}
             {settings.waveshare && <Waveshare />}
             {settings.knob && <Knob />}
+            {settings.splitFlapText && <SplitFlapText />}
             <Wifi />
             <Network />
             <Esp />

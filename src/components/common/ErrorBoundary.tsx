@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export interface Props {
   fallback: React.ReactNode;
+  children: React.ReactNode;
 }
 export interface State {
   hasError: boolean;

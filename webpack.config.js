@@ -39,7 +39,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: {
-          host: '192.168.3.30',
+          host: '192.168.3.75',
           protocol: 'http:',
         },
         pathRewrite: {
