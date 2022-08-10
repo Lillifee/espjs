@@ -13,7 +13,7 @@ import {
   CardOverlay,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useUserInput, useFetch, FetchState } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 
 export interface ApiBmeSettings {
   host: string;
@@ -42,12 +42,12 @@ const initSettings: ApiBmeSettings = {
 };
 
 export const Bme: React.FC = () => {
-  const { state, update } = useFetch<ApiBmeSettings>('/api/bme', initSettings, 3000);
+  const [state, update, setInput] = useFetch<ApiBmeSettings>('/api/bme', initSettings, { refreshInterval: 3000 });
 
   return (
     <CardContainer>
       <BmeStatus state={state} />
-      <BmeSettings state={state} update={update} />
+      <BmeSettings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -75,35 +75,27 @@ export const BmeStatus: React.FC<BmeStatusProps> = ({ state }) => {
 
 export interface BmeSettingsProps {
   state: FetchState<ApiBmeSettings>;
-  update: (data: Partial<ApiBmeSettings>) => void;
+  update: (data?: Partial<ApiBmeSettings>) => void;
+  setInput: (data: Partial<ApiBmeSettings>) => void;
 }
 
-export const BmeSettings: React.FC<BmeSettingsProps> = ({ state, update }) => {
+export const BmeSettings: React.FC<BmeSettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput] = useUserInput<ApiBmeSettings>();
-
-  const data = React.useMemo<Partial<ApiBmeSettings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
 
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
           <SubLabel fontSize="xs">UDP Host</SubLabel>
-          <Input value={data.host} onChange={setInput('host')} />
+          <Input value={state.data.host} onChange={onChangeInput(setInput, 'host')} />
 
           <SubLabel fontSize="xs">UDP Port</SubLabel>
-          <Input value={data.port} onChange={setInput('port')} />
+          <Input value={state.data.port} onChange={onChangeInput(setInput, 'port')} />
 
           <SubLabel fontSize="xs">Send interval (ms)</SubLabel>
-          <Input value={data.requestInterval} onChange={setInput('requestInterval')} />
+          <Input value={state.data.requestInterval} onChange={onChangeInput(setInput, 'requestInterval')} />
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>

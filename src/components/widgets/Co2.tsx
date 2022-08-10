@@ -13,7 +13,7 @@ import {
   CardOverlay,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useUserInput, useFetch, FetchState } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 import styled from 'styled-components';
 import { Gauge } from '../common';
 
@@ -40,12 +40,12 @@ const initSettings: ApiCo2Settings = {
 };
 
 export const Co2: React.FC = () => {
-  const { state, update } = useFetch<ApiCo2Settings>('/api/co2', initSettings, 3000);
+  const [state, update, setInput] = useFetch<ApiCo2Settings>('/api/co2', initSettings, { refreshInterval: 3000 });
 
   return (
     <CardContainer>
       <Co2Status state={state} />
-      <Co2Settings state={state} update={update} />
+      <Co2Settings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -105,42 +105,29 @@ export const Co2Status: React.FC<Co2StatusProps> = ({ state }) => {
 
 export interface Co2SettingsProps {
   state: FetchState<ApiCo2Settings>;
-  update: (data: Partial<ApiCo2Settings>) => void;
+  update: (data?: Partial<ApiCo2Settings>) => void;
+  setInput: (data: Partial<ApiCo2Settings>) => void;
 }
 
-export const Co2Settings: React.FC<Co2SettingsProps> = ({ state, update }) => {
+export const Co2Settings: React.FC<Co2SettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput] = useUserInput<ApiCo2Settings>();
-
-  const data = React.useMemo<Partial<ApiCo2Settings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
 
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
           <SubLabel fontSize="xs">UDP Host</SubLabel>
-          <Input value={data.host} onChange={setInput('host')} />
+          <Input value={state.data.host} onChange={onChangeInput(setInput, 'host')} />
 
           <SubLabel fontSize="xs">UDP Port</SubLabel>
-          <Input value={data.port} onChange={setInput('port')} />
+          <Input value={state.data.port} onChange={onChangeInput(setInput, 'port')} />
 
           <SubLabel fontSize="xs">Send interval (ms)</SubLabel>
-          <Input value={data.requestInterval} onChange={setInput('requestInterval')} />
-
-          {/* 
-          <SubLabel fontSize="xs">Auto calibration</SubLabel>
-          <Input value={data.autoCalibration ? '1' : '0'} onChange={setInput('autoCalibration')} /> 
-          */}
+          <Input value={state.data.requestInterval} onChange={onChangeInput(setInput, 'requestInterval')} />
 
           <Button onClick={() => fetch('/api/co2Calibrate').then()}>Calibrate (400ppm)</Button>
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>
