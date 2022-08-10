@@ -13,7 +13,7 @@ import {
   CardOverlay,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useUserInput, useFetch, FetchState } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 import styled from 'styled-components';
 import { Gauge } from '../common';
 
@@ -34,12 +34,14 @@ const initSettings: ApiWifiSettings = {
 };
 
 export const Wifi: React.FC = () => {
-  const { state, update } = useFetch<ApiWifiSettings>('/api/wifi', initSettings, 3000);
+  const [state, update, setInput] = useFetch<ApiWifiSettings>('/api/wifi', initSettings, {
+    refreshInterval: 3000,
+  });
 
   return (
     <CardContainer>
       <WifiStatus state={state} />
-      <WifiSettings state={state} update={update} />
+      <WifiSettings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -100,35 +102,27 @@ export const WifiStatus: React.FC<WifiStatusProps> = ({ state }) => {
 
 export interface WifiSettingsProps {
   state: FetchState<ApiWifiSettings>;
-  update: (data: Partial<ApiWifiSettings>) => void;
+  update: (data?: Partial<ApiWifiSettings>) => void;
+  setInput: (data: Partial<ApiWifiSettings>) => void;
 }
 
-export const WifiSettings: React.FC<WifiSettingsProps> = ({ state, update }) => {
+export const WifiSettings: React.FC<WifiSettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput] = useUserInput<ApiWifiSettings>();
-
-  const data = React.useMemo<Partial<ApiWifiSettings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
 
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
           <SubLabel fontSize="xs">Host</SubLabel>
-          <Input value={data.host} onChange={setInput('host')} />
+          <Input value={state.data.host} onChange={onChangeInput(setInput, 'host')} />
 
           <SubLabel fontSize="xs">SSID</SubLabel>
-          <Input value={data.ssid} onChange={setInput('ssid')} />
+          <Input value={state.data.ssid} onChange={onChangeInput(setInput, 'ssid')} />
 
           <SubLabel fontSize="xs">Password</SubLabel>
-          <Input type="Password" value={data.password || ''} onChange={setInput('password')} />
+          <Input type="Password" value={state.data.password || ''} onChange={onChangeInput(setInput, 'password')} />
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>

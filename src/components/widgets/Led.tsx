@@ -24,7 +24,7 @@ import {
 } from '../styles';
 import styled, { css } from 'styled-components';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useUserInput, useFetch, FetchState } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 
 export interface ApiLedSettings {
   brightness: number;
@@ -53,12 +53,12 @@ const initSettings: ApiLedSettings = {
 };
 
 export const Led: React.FC = () => {
-  const { state, update } = useFetch<ApiLedSettings>('/api/led', initSettings, 10000, false);
+  const [state, update, setInput] = useFetch<ApiLedSettings>('/api/led', initSettings, { refreshInterval: 10000 });
 
   return (
     <CardContainer>
       <LedStatus state={state} />
-      <LedSettings state={state} update={update} />
+      <LedSettings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -128,7 +128,8 @@ export const LedStatus: React.FC<LedStatusProps> = ({ state }) => {
 
 export interface LedSettingsProps {
   state: FetchState<ApiLedSettings>;
-  update: (data: Partial<ApiLedSettings>) => void;
+  update: (data?: Partial<ApiLedSettings>) => void;
+  setInput: (data: Partial<ApiLedSettings>) => void;
 }
 
 function hexToVbColor(colorString: string) {
@@ -254,12 +255,10 @@ export const AnimationButton = styled.button<{ active?: boolean }>`
 
 const calculateStep = (start?: number, end?: number) => Math.round(((end || 0) - (start || 0)) / 24);
 
-export const LedSettings: React.FC<LedSettingsProps> = ({ state, update }) => {
+export const LedSettings: React.FC<LedSettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput, setUserInput] = useUserInput<ApiLedSettings>();
-
-  const data = React.useMemo<Partial<ApiLedSettings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
   const [tab, setTab] = React.useState(0);
+
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
@@ -281,9 +280,9 @@ export const LedSettings: React.FC<LedSettingsProps> = ({ state, update }) => {
                 {[...Array(9).keys()].map((x) => (
                   <AnimationButton
                     key={x}
-                    active={x === data.animation}
+                    active={x === state.data.animation}
                     onClick={() => {
-                      setUserInput({ ...data, animation: x });
+                      setInput({ animation: x });
                     }}
                   >
                     {getAnimationText(x)}
@@ -301,26 +300,25 @@ export const LedSettings: React.FC<LedSettingsProps> = ({ state, update }) => {
                 <Radio
                   key={mode}
                   value={mode}
-                  checked={data?.mode === mode}
-                  onChange={(e) => setUserInput({ ...data, mode: parseInt(e.target.value) })}
+                  checked={state.data.mode === mode}
+                  onChange={(e) => setInput({ mode: parseInt(e.target.value) })}
                 >
                   {getModeText(mode)}
                 </Radio>
               ))}
 
-              {data.mode === 0 && (
+              {state.data.mode === 0 && (
                 <React.Fragment>
                   <SubLabel fontSize="xs">Start</SubLabel>
                   <HueSlider
                     min="0"
                     max="255"
                     type="range"
-                    value={data.initHue}
+                    value={state.data.initHue}
                     onChange={(e) => {
-                      setUserInput({
-                        ...userInput,
+                      setInput({
                         initHue: e.target.valueAsNumber,
-                        deltaHue: calculateStep(e.target.valueAsNumber, data.endHue),
+                        deltaHue: calculateStep(e.target.valueAsNumber, state.data.endHue),
                       });
                     }}
                   />
@@ -330,35 +328,46 @@ export const LedSettings: React.FC<LedSettingsProps> = ({ state, update }) => {
                     min="0"
                     max="255"
                     type="range"
-                    value={data.endHue}
+                    value={state.data.endHue}
                     onChange={(e) => {
-                      setUserInput({
-                        ...userInput,
+                      setInput({
                         endHue: e.target.valueAsNumber,
-                        deltaHue: calculateStep(data.initHue, e.target.valueAsNumber),
+                        deltaHue: calculateStep(state.data.initHue, e.target.valueAsNumber),
                       });
                     }}
                   />
                 </React.Fragment>
               )}
-              {data.mode === 2 && (
+              {state.data.mode === 2 && (
                 <React.Fragment>
                   <React.Fragment>
                     <SubLabel fontSize="xs">Start</SubLabel>
-                    <HueSlider min="0" max="255" type="range" value={data.initHue} onChange={setInput('initHue')} />
+                    <HueSlider
+                      min="0"
+                      max="255"
+                      type="range"
+                      value={state.data.initHue}
+                      onChange={onChangeInput(setInput, 'initHue')}
+                    />
 
                     <SubLabel fontSize="xs">End</SubLabel>
-                    <HueSlider min="0" max="255" type="range" value={data.endHue} onChange={setInput('endHue')} />
+                    <HueSlider
+                      min="0"
+                      max="255"
+                      type="range"
+                      value={state.data.endHue}
+                      onChange={onChangeInput(setInput, 'endHue')}
+                    />
                   </React.Fragment>
                 </React.Fragment>
               )}
-              {data.mode === 1 && (
+              {state.data.mode === 1 && (
                 <React.Fragment>
                   <SubLabel fontSize="xs">Color</SubLabel>
                   <Input
                     type="color"
-                    value={vbColorToHEX(data.color)}
-                    onChange={(e) => setUserInput({ ...userInput, color: hexToVbColor(e.target.value) })}
+                    value={vbColorToHEX(state.data.color)}
+                    onChange={(e) => setInput({ color: hexToVbColor(e.target.value) })}
                   />
                 </React.Fragment>
               )}
@@ -368,38 +377,42 @@ export const LedSettings: React.FC<LedSettingsProps> = ({ state, update }) => {
           {tab === 2 && (
             <TabPanel>
               <SubLabel fontSize="xs">Min value</SubLabel>
-              <SliderValue min="0" max={data.max || 350 - 100} value={data.min} onChange={setInput('min')} />
+              <SliderValue
+                min="0"
+                max={state.data.max || 350 - 100}
+                value={state.data.min}
+                onChange={onChangeInput(setInput, 'min')}
+              />
 
               <SubLabel fontSize="xs">Brightness</SubLabel>
               <Space />
               <Radio
                 value={-1}
-                checked={data?.brightness === -1}
-                onChange={(e) => setUserInput({ ...data, brightness: parseInt(e.target.value) })}
+                checked={state.data.brightness === -1}
+                onChange={(e) => setInput({ brightness: parseInt(e.target.value) })}
               >
                 Value
               </Radio>
               <Radio
                 value={0}
-                checked={(data?.brightness || 0) > -1}
-                onChange={() => setUserInput({ ...data, brightness: 255 })}
+                checked={(state.data.brightness || 0) > -1}
+                onChange={() => setInput({ brightness: 255 })}
               >
                 Manual
               </Radio>
 
-              {data?.brightness !== -1 && (
-                <SliderValue min="0" max={255} value={data.brightness} onChange={setInput('brightness')} />
+              {state.data.brightness !== -1 && (
+                <SliderValue
+                  min="0"
+                  max={255}
+                  value={state.data.brightness}
+                  onChange={onChangeInput(setInput, 'brightness')}
+                />
               )}
             </TabPanel>
           )}
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>
