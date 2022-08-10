@@ -17,7 +17,7 @@ import {
   Space,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useFetch, FetchState, useUserInput } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 import { WifiGauge, WifiGaugeDisplay } from './Wifi';
 import { Gauge } from '../common';
 
@@ -38,12 +38,12 @@ const initSettings: ApiKnobSettings = {
 };
 
 export const Knob: React.FC = () => {
-  const { state, update } = useFetch<ApiKnobSettings>('/api/knob', initSettings, 1000);
+  const [state, update, setInput] = useFetch<ApiKnobSettings>('/api/knob', initSettings, { refreshInterval: 1000 });
 
   return (
     <CardContainer>
       <KnobStatus state={state} />
-      <KnobSettings state={state} update={update} />
+      <KnobSettings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -84,34 +84,26 @@ export const KnobStatus: React.FC<KnobStatusProps> = ({ state }) => {
 
 export interface KnobSettingsProps {
   state: FetchState<ApiKnobSettings>;
-  update: (data: Partial<ApiKnobSettings>) => void;
+  update: (data?: Partial<ApiKnobSettings>) => void;
+  setInput: (data: Partial<ApiKnobSettings>) => void;
 }
 
-export const KnobSettings: React.FC<KnobSettingsProps> = ({ state, update }) => {
+export const KnobSettings: React.FC<KnobSettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput] = useUserInput<ApiKnobSettings>();
-
-  const data = React.useMemo<Partial<ApiKnobSettings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
 
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
           <SubLabel fontSize="xs">UDP Host</SubLabel>
-          <Input value={data.host} onChange={setInput('host')} />
+          <Input value={state.data.host} onChange={onChangeInput(setInput, 'host')} />
 
           <SubLabel fontSize="xs">UDP Port</SubLabel>
-          <Input value={data.port} onChange={setInput('port')} />
+          <Input value={state.data.port} onChange={onChangeInput(setInput, 'port')} />
 
           <Space />
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>

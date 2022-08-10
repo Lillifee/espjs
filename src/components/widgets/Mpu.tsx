@@ -2,9 +2,9 @@ import * as React from 'react';
 import {
   Card,
   CardInfo,
-  Label,
   CardFooter,
   CardSetting,
+  Label,
   Input,
   CardContainer,
   CardFooterPanel,
@@ -18,7 +18,7 @@ import {
   SliderValue,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useFetch, FetchState, useUserInput } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 import styled from 'styled-components';
 
 export interface ApiMpuSettings {
@@ -46,12 +46,12 @@ const initSettings: ApiMpuSettings = {
 const sideArray = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export const Mpu: React.FC = () => {
-  const { state, update } = useFetch<ApiMpuSettings>('/api/mpu', initSettings, 3000);
+  const [state, update, setInput] = useFetch<ApiMpuSettings>('/api/mpu', initSettings, { refreshInterval: 3000 });
 
   return (
     <CardContainer>
       <MpuStatus state={state} />
-      <MpuSettings state={state} update={update} />
+      <MpuSettings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -100,43 +100,35 @@ export const MpuStatus: React.FC<MpuStatusProps> = ({ state }) => {
 
 export interface MpuSettingsProps {
   state: FetchState<ApiMpuSettings>;
-  update: (data: Partial<ApiMpuSettings>) => void;
+  update: (data?: Partial<ApiMpuSettings>) => void;
+  setInput: (data: Partial<ApiMpuSettings>) => void;
 }
 
-export const MpuSettings: React.FC<MpuSettingsProps> = ({ state, update }) => {
+export const MpuSettings: React.FC<MpuSettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput] = useUserInput<ApiMpuSettings>();
-
-  const data = React.useMemo<Partial<ApiMpuSettings>>(() => ({ ...state.data, ...userInput }), [state, userInput]);
 
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
           <SubLabel fontSize="xs">UDP Host</SubLabel>
-          <Input value={data.host} onChange={setInput('host')} />
+          <Input value={state.data.host} onChange={onChangeInput(setInput, 'host')} />
 
           <SubLabel fontSize="xs">UDP Port</SubLabel>
-          <Input value={data.port} onChange={setInput('port')} />
+          <Input value={state.data.port} onChange={onChangeInput(setInput, 'port')} />
 
           <Space />
           <Space />
 
           <SubLabel fontSize="xs">Motion duration (default = 1)</SubLabel>
-          <SliderValue min="1" max="100" value={data.duration} onChange={setInput('duration')} />
+          <SliderValue min="1" max="100" value={state.data.duration} onChange={onChangeInput(setInput, 'duration')} />
 
           <SubLabel fontSize="xs">Motion threshold (default = 20)</SubLabel>
-          <SliderValue min="1" max="100" value={data.threshold} onChange={setInput('threshold')} />
+          <SliderValue min="1" max="100" value={state.data.threshold} onChange={onChangeInput(setInput, 'threshold')} />
 
           <Space />
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>

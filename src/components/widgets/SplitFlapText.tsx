@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { CardContainer, Card, CardInfo, CardInfoContent } from '../styles';
 import { Label, Input } from '../styles';
-import { useUserInput, useFetch, FetchState } from '../hooks';
-import { useDebounce } from '../hooks/useDebounce';
+import { useFetch, FetchState } from '../hooks';
 
 export interface ApiSplitFlapTextSettings {
   text: string;
@@ -13,7 +12,10 @@ const initSettings: ApiSplitFlapTextSettings = {
 };
 
 export const SplitFlapText: React.FC = () => {
-  const { state, update } = useFetch<ApiSplitFlapTextSettings>('/api/splitflap', initSettings, 3000);
+  const [state, update] = useFetch<ApiSplitFlapTextSettings>('/api/splitflap', initSettings, {
+    refreshInterval: 3000,
+    updateDebounce: 500,
+  });
 
   return (
     <CardContainer>
@@ -24,30 +26,16 @@ export const SplitFlapText: React.FC = () => {
 
 export interface SplitFlapProps {
   state: FetchState<ApiSplitFlapTextSettings>;
-  update: (data: Partial<ApiSplitFlapTextSettings>) => void;
+  update: (data?: ApiSplitFlapTextSettings) => void;
 }
 
-export const SplitFlap: React.FC<SplitFlapProps> = ({ state, update }) => {
-  const [userInput, setInput] = useUserInput<ApiSplitFlapTextSettings>();
-  const data = React.useMemo<Partial<ApiSplitFlapTextSettings>>(
-    () => ({ ...state.data, ...userInput }),
-    [state, userInput],
-  );
-
-  const text = useDebounce(data.text, 500);
-
-  React.useEffect(() => {
-    update({ text: text });
-  }, [text]);
-
-  return (
-    <Card>
-      <CardInfo>
-        <Label fontSize="s">Split-flap</Label>
-        <CardInfoContent>
-          <Input value={data.text} onChange={setInput('text')} placeholder="HELLO :)" />
-        </CardInfoContent>
-      </CardInfo>
-    </Card>
-  );
-};
+export const SplitFlap: React.FC<SplitFlapProps> = ({ state, update }) => (
+  <Card>
+    <CardInfo>
+      <Label fontSize="s">Split-flap</Label>
+      <CardInfoContent>
+        <Input value={state.data.text} onChange={(e) => update({ text: e.target.value })} placeholder="HELLO :)" />
+      </CardInfoContent>
+    </CardInfo>
+  </Card>
+);

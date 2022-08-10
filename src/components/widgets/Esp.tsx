@@ -37,7 +37,7 @@ function formatNumber(number: number, unit: string, fractionDigits = 2) {
 }
 
 export const Esp: React.FC = () => {
-  const { state } = useFetch<ApiEsp>('/api/esp', initSettings, 5000);
+  const [state] = useFetch<ApiEsp>('/api/esp', initSettings, { refreshInterval: 5000 });
 
   return (
     <CardContainer>
