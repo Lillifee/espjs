@@ -56,7 +56,7 @@ const applicationSettings: Record<Application, ApplicationSettings> = {
 };
 
 export const Main: React.FC = () => {
-  const { state } = useFetch<ApiApplication>('/api/application', {});
+  const [state] = useFetch<ApiApplication>('/api/application', {});
   const application = state.data.application;
   const settings = application ? applicationSettings[application] : undefined;
 

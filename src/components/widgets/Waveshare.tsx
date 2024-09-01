@@ -13,7 +13,7 @@ import {
   CardOverlay,
 } from '../styles';
 import { RoundIcon, ButtonIcon } from '../Icons';
-import { useUserInput, useFetch, FetchState } from '../hooks';
+import { useFetch, FetchState, onChangeInput } from '../hooks';
 
 export interface ApiWaveshareSettings {
   host: string;
@@ -30,12 +30,14 @@ const initSettings: ApiWaveshareSettings = {
 };
 
 export const Waveshare: React.FC = () => {
-  const { state, update } = useFetch<ApiWaveshareSettings>('/api/waveshare', initSettings, 3000);
+  const [state, update, setInput] = useFetch<ApiWaveshareSettings>('/api/waveshare', initSettings, {
+    refreshInterval: 3000,
+  });
 
   return (
     <CardContainer>
       <WaveshareStatus state={state} />
-      <WaveshareSettings state={state} update={update} />
+      <WaveshareSettings state={state} update={update} setInput={setInput} />
     </CardContainer>
   );
 };
@@ -60,41 +62,30 @@ export const WaveshareStatus: React.FC<WaveshareStatusProps> = ({ state }) => {
 
 export interface WaveshareSettingsProps {
   state: FetchState<ApiWaveshareSettings>;
-  update: (data: Partial<ApiWaveshareSettings>) => void;
+  update: (data?: Partial<ApiWaveshareSettings>) => void;
+  setInput: (data: Partial<ApiWaveshareSettings>) => void;
 }
 
-export const WaveshareSettings: React.FC<WaveshareSettingsProps> = ({ state, update }) => {
+export const WaveshareSettings: React.FC<WaveshareSettingsProps> = ({ state, update, setInput }) => {
   const [expanded, setExpanded] = React.useState<boolean>(false);
-  const [userInput, setInput, clearUserInput] = useUserInput<ApiWaveshareSettings>();
-
-  const data = React.useMemo<Partial<ApiWaveshareSettings>>(
-    () => ({ ...state.data, ...userInput }),
-    [state, userInput],
-  );
 
   return (
     <CardOverlay>
       <CardSetting expanded={expanded}>
         <CardSettingPanel>
           <SubLabel fontSize="xs">Url</SubLabel>
-          <Input value={data.host} onChange={setInput('host')} />
+          <Input value={state.data.host} onChange={onChangeInput(setInput, 'host')} />
 
           <SubLabel fontSize="xs">User</SubLabel>
-          <Input value={data.user} onChange={setInput('user')} />
+          <Input value={state.data.user} onChange={onChangeInput(setInput, 'user')} />
 
           <SubLabel fontSize="xs">Password</SubLabel>
-          <Input type="Password" value={data.password} onChange={setInput('password')} />
+          <Input type="Password" value={state.data.password} onChange={onChangeInput(setInput, 'password')} />
 
           <SubLabel fontSize="xs">Update interval (minutes)</SubLabel>
-          <Input value={data.updateInterval} onChange={setInput('updateInterval')} />
+          <Input value={state.data.updateInterval} onChange={onChangeInput(setInput, 'updateInterval')} />
 
-          <Button
-            disabled={!userInput}
-            onClick={() => {
-              userInput && update(userInput);
-              clearUserInput();
-            }}
-          >
+          <Button disabled={!state.input} onClick={() => update()}>
             Apply
           </Button>
         </CardSettingPanel>

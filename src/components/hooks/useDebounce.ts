@@ -1,17 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-export const useDebounce = <T>(value: T, delay = 500) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+/**
+ * Debounce callback hook
+ *
+ * @param callback debounce action
+ * @param wait wait time in ms
+ * @return debounde trigger function
+ */
+export function useDebounce<T extends ((...args: never[]) => void) | (() => void)>(
+  callback: T,
+  wait?: number,
+): [(...args: Parameters<T>) => void] {
+  // Reference of running timer
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+  // Clear timer
+  const clearTimer = () => {
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+  };
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
+  // Clear timer on unmount
+  useEffect(() => clearTimer, []);
 
-  return debouncedValue;
-};
+  // Start timer
+  const debounceCallback = useCallback(
+    (...args: never[]) => {
+      clearTimer();
+      timeout.current = setTimeout(() => callback(...args), wait || 0);
+    },
+    [callback, wait],
+  );
+
+  return [debounceCallback];
+}
